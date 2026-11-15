@@ -1,0 +1,613 @@
+/* ========================================================
+   旅遊手帳小幫手 (Travel Journal Guide)
+   視覺風格：日系無印雜誌風 + 旅行手帳日記翻頁感
+   ======================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap');
+
+:root {
+  /* 大地色系與無印質感調色盤 */
+  --bg-canvas: #FBF9F5;
+  --bg-card: #FFFFFF;
+  --bg-card-back: #F7F4EE;
+  --bg-tag: #F0ECE4;
+  --border-color: #ECE7DF;
+  --border-dashed: #DFD7CB;
+  --text-main: #2D2B2A;
+  --text-sub: #7B756D;
+  --text-muted: #A49D93;
+  --accent-matcha: #5B6E58;
+  --accent-matcha-light: #EEF2ED;
+  --accent-terracotta: #B46049;
+  --accent-terracotta-light: #FAECE8;
+  --accent-washi: #E8DCC4;
+  --accent-ink: #1F2326;
+  
+  /* 陰影與圓角 */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-subtle: 0 4px 16px rgba(50, 40, 30, 0.05);
+  --shadow-hover: 0 12px 32px rgba(50, 40, 30, 0.1);
+  --shadow-polaroid: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+  /* 字型 */
+  --font-serif: 'Noto Serif TC', serif, -apple-system, BlinkMacSystemFont, "Songti TC";
+  --font-sans: 'Noto Sans TC', sans-serif, -apple-system, BlinkMacSystemFont, "PingFang TC";
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  position: relative;
+  background-image: radial-gradient(#E8E3DA 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+}
+
+/* 頂部裝飾與雜誌風 Header */
+.site-header {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 48px 24px 24px;
+  text-align: center;
+  position: relative;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-matcha-light);
+  color: var(--accent-matcha);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+  border: 1px dashed #C8D6C4;
+}
+
+.site-title {
+  font-family: var(--font-serif);
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+.site-subtitle {
+  color: var(--text-sub);
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+
+/* 搜尋與過濾區（手帳索引書籤列） */
+.filter-wrapper {
+  max-width: 1140px;
+  margin: 0 auto 36px;
+  padding: 0 24px;
+}
+
+.search-box-container {
+  max-width: 620px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 20px 14px 48px;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  box-shadow: var(--shadow-subtle);
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.search-input:focus {
+  border-color: var(--accent-matcha);
+  box-shadow: 0 0 0 3px rgba(91, 110, 88, 0.15);
+}
+
+.search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-sub);
+  min-width: 72px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tab-btn {
+  background: var(--bg-tag);
+  color: var(--text-sub);
+  border: none;
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.tab-btn:hover {
+  background: #E5DFD4;
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  background: var(--accent-matcha);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(91, 110, 88, 0.25);
+}
+
+.filter-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.reset-filter-btn {
+  background: none;
+  border: none;
+  color: var(--accent-terracotta);
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s;
+}
+
+.reset-filter-btn:hover {
+  opacity: 0.75;
+}
+
+/* 景點主體容器 (手帳卡片網格) */
+.main-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.spots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 32px;
+}
+
+/* 翻頁手帳卡片 (Journal Flip Card) */
+.journal-card {
+  perspective: 1400px;
+  min-height: 520px;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-subtle);
+}
+
+.journal-card.is-flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* 卡片正反面共通樣式 */
+.card-front,
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== 卡片正面 (手帳拍立得與簡介) ========== */
+.card-front {
+  background: var(--bg-card);
+}
+
+/* 和紙膠帶與拍立得相框 */
+.polaroid-frame {
+  position: relative;
+  background: #FFFFFF;
+  padding: 8px 8px 14px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-polaroid);
+  margin-bottom: 16px;
+}
+
+/* 日系和紙膠帶 (Washi Tape) 裝飾 */
+.washi-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 22px;
+  background: rgba(232, 220, 196, 0.85);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-left: 2px dashed rgba(255, 255, 255, 0.5);
+  border-right: 2px dashed rgba(255, 255, 255, 0.5);
+  z-index: 2;
+}
+
+.spot-image-box {
+  width: 100%;
+  height: 190px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #F0EDE8;
+}
+
+.spot-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+/* 待補照片手帳風格佔位框 */
+.spot-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #F8F5EE;
+  border: 1.5px dashed #D8CFC2;
+  border-radius: 4px;
+  color: var(--text-sub);
+  text-align: center;
+  padding: 12px;
+  user-select: none;
+}
+
+.placeholder-icon {
+  font-size: 1.9rem;
+  margin-bottom: 4px;
+  opacity: 0.65;
+}
+
+.placeholder-text {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-main);
+  letter-spacing: 0.05em;
+}
+
+.placeholder-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.polaroid-frame:hover .spot-image {
+  transform: scale(1.03);
+}
+
+.image-credit {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* 正面標題與可愛座標 */
+.spot-meta-region {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: var(--accent-matcha);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.cute-pin-icon {
+  width: 16px;
+  height: 16px;
+  fill: var(--accent-terracotta);
+  flex-shrink: 0;
+}
+
+.spot-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.spot-highlight {
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: auto;
+}
+
+.cat-pill {
+  font-size: 0.75rem;
+  background: var(--bg-tag);
+  color: var(--text-sub);
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+/* 翻轉切換按鈕 */
+.flip-action-bar {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--accent-matcha);
+  background: none;
+  border: 1px solid var(--accent-matcha);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flip-btn:hover {
+  background: var(--accent-matcha);
+  color: #FFFFFF;
+}
+
+/* ========== 卡片背面 (手帳日記深度攻略頁) ========== */
+.card-back {
+  background: var(--bg-card-back);
+  transform: rotateY(180deg);
+  overflow-y: auto;
+}
+
+.journal-back-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #E5DEC9;
+  margin-bottom: 14px;
+}
+
+.journal-back-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.journal-note-body {
+  font-size: 0.88rem;
+  color: var(--text-main);
+  line-height: 1.65;
+  margin-bottom: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-matcha);
+}
+
+.info-guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.83rem;
+  margin-bottom: 16px;
+}
+
+.guide-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.guide-item-icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.guide-label {
+  font-weight: 600;
+  color: var(--text-sub);
+  min-width: 65px;
+}
+
+.guide-val {
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+.tips-box {
+  background: var(--accent-terracotta-light);
+  border-left: 3px solid var(--accent-terracotta);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: #7A3525;
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.back-action-bar {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-dashed);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--accent-terracotta);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.map-link-btn:hover {
+  text-decoration: underline;
+}
+
+.flip-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  background: none;
+  border: 1px solid var(--border-dashed);
+  padding: 4px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.flip-back-btn:hover {
+  background: #EAE3D5;
+  color: var(--text-main);
+}
+
+/* 空狀態提示 */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-sub);
+}
+
+.empty-state-icon {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+/* 頁尾 Footer */
+.site-footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  border-top: 1px solid var(--border-color);
+  background: #F8F5EE;
+}
+
+/* 響應式微調 */
+@media (max-width: 768px) {
+  .site-title {
+    font-size: 1.8rem;
+  }
+  .spots-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .filter-section {
+    padding: 16px;
+  }
+  .filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
