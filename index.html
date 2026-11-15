@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅人手帳・景點小幫手 | Travel Journal Guide</title>
+  <meta name="description" content="個人旅遊景點統整小幫手，收納心動的旅行靈感，如手帳般翻閱探索。">
+  <!-- 引入日系無印手帳風格樣式表 (具備路徑容錯機制，相容資料夾結構與平鋪上傳) -->
+  <link rel="stylesheet" href="./css/style.css" onerror="this.onerror=null;this.href='./style.css';">
+</head>
+<body>
+
+  <!-- 頂部標題區 -->
+  <header class="site-header">
+    <div class="header-badge">✦ 私房旅行手帳 ✦</div>
+    <h1 class="site-title">日日旅行手札・景點小幫手</h1>
+    <p class="site-subtitle">收納每一處令人心動的私房風景，像翻閱日記本般探索日本的四季名勝與深度攻略。</p>
+  </header>
+
+  <!-- 搜尋與手帳索引篩選區 -->
+  <section class="filter-wrapper">
+    <!-- 關鍵字搜尋框 -->
+    <div class="search-box-container">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input 
+        type="text" 
+        id="searchInput" 
+        class="search-input" 
+        placeholder="搜尋景點名稱、特色亮點、心得或交通關鍵字..."
+        autocomplete="off"
+      >
+    </div>
+
+    <!-- 索引標籤區塊 -->
+    <div class="filter-section">
+      <!-- 地區篩選列 -->
+      <div class="filter-row">
+        <div class="filter-label">📍 地區索引</div>
+        <div class="filter-tags" id="regionTabs">
+          <!-- 由 app.js 動態產生地區標籤 -->
+        </div>
+      </div>
+
+      <!-- 主題分類篩選列 -->
+      <div class="filter-row">
+        <div class="filter-label">🏷️ 主題分類</div>
+        <div class="filter-tags" id="categoryTabs">
+          <!-- 由 app.js 動態產生分類標籤 -->
+        </div>
+      </div>
+
+      <!-- 統計與重設列 -->
+      <div class="filter-meta-bar">
+        <span id="countDisplay">載入中...</span>
+        <button id="resetBtn" class="reset-filter-btn">重設所有篩選</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 景點手帳卡片容器 -->
+  <main class="main-container">
+    <div class="spots-grid" id="spotsGrid">
+      <!-- 由 app.js 動態渲染景點翻頁手帳卡片 -->
+    </div>
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="site-footer">
+    <p>日日旅行手札・個人景點收藏庫 &copy; 2026</p>
+    <p style="margin-top: 6px; font-size: 0.75rem;">支援 GitHub Pages 靜態託管 ｜ 純原生零編譯建置 ｜ 點擊「翻看攻略手札」可 3D 翻頁查看細節</p>
+  </footer>
+
+  <!-- 核心資料與互動邏輯 (智能雙重路徑載入，自動相容 ./data/ 與根目錄平鋪) -->
+  <script>
+    (function() {
+      function loadScript(primarySrc, fallbackSrc, callback) {
+        var s = document.createElement('script');
+        s.src = primarySrc;
+        s.onload = function() { if (callback) callback(); };
+        s.onerror = function() {
+          if (fallbackSrc) {
+            var fb = document.createElement('script');
+            fb.src = fallbackSrc;
+            fb.onload = function() { if (callback) callback(); };
+            document.body.appendChild(fb);
+          }
+        };
+        document.body.appendChild(s);
+      }
+
+      // 先載入資料 spots.js，再載入邏輯 app.js
+      loadScript('./data/spots.js', './spots.js', function() {
+        loadScript('./js/app.js', './app.js');
+      });
+    })();
+  </script>
+</body>
+</html>
